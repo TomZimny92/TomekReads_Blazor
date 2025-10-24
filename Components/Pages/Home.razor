@@ -1,7 +1,47 @@
 ﻿@page "/"
+@using TomekReads.Models;
+@using TomekReads.Services;
 
-<PageTitle>Home</PageTitle>
+<div>
+    <ul>
+        @foreach (var book in books)
+        {
+            <li>
+                <BookView Book="book" />
+            </li>
+        }
+    </ul>
+</div>
 
-<h1>Hello, world!</h1>
+@code {
+    public async Task LoadBooks()
+    {
+        try
+        {
+            var result = await BookService.GetAll();
+            if (result != null)
+            {
+                books = result;
+            }
+        }
+        catch
+        {
 
-Welcome to your new app.
+        }
+    }
+
+    private List<Book> books = [
+        new Book() {
+            Id = 0,
+            Title = "The Stranger",
+            Rating = 5,
+            Review = "Makes you wonder"
+    },
+        new Book() {
+            Id = 1,
+            Title = "Goosebumps",
+            Rating = 4,
+            Review = "Terrified me as a kid"
+        }
+    ];
+}
