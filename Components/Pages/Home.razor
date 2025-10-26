@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using TomekReads.Models;
+@using TomekReads.Controllers;
 @using TomekReads.Services;
 
 <div>
+    <button name="Add Book" onclick="OpenCreateEditor"/>
     <ul>
         @foreach (var book in books)
         {
@@ -14,11 +16,12 @@
 </div>
 
 @code {
-    public async Task LoadBooks()
+    public void LoadBooks()
     {
         try
         {
-            var result = await BookService.GetAll();
+            var controller = new BookController();
+            var result = controller.GetAll().Value;
             if (result != null)
             {
                 books = result;
@@ -28,6 +31,13 @@
         {
 
         }
+    }
+
+    public void OpenCreateEditor()
+    {
+        // open a modal to fill in new book info
+        // do one at a time for now
+        // add multiple books later
     }
 
     private List<Book> books = [
