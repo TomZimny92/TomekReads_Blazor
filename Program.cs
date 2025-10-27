@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.EntityFrameworkCore.Design;
 using TomekReads.Components;
 using TomekReads.Data;
+using TomekReads.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddRazorComponents()
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<BookDbContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
 

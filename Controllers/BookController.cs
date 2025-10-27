@@ -6,63 +6,150 @@ using TomekReads.Models;
 namespace TomekReads.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BookController : ControllerBase
     {
-        public BookController()
+        private readonly IBookService _bookService;
+
+        public BookController(IBookService bookService)
         {
-            var arrtest = new Book[10];
+            _bookService = bookService;
         }
 
         [HttpGet]
-        public ActionResult<List<Book>> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<Book>>> GetAllBooksAsync()
         {
-            return BookService.GetAll();
+            try
+            {
+                var books = await _bookService.GetAllAsync();
+                if (books == null)
+                {
+                    return NotFound();
+                }
+                return Ok(books);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Book> Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Book>> GetBookAsync(int id)
         {
-            var book = BookService.GetBook(id);
-            if (book == null)
+            try
             {
-                return NotFound();
+                var book = await _bookService.GetBookAsync(id);
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                return Ok(book);
+
             }
-            return Ok(book);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult CreateBook(Book book)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateBookAsync(Book book)
         {
             // validate book parameter
-            
-            BookService.AddBook(book);
-            return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
+            //var isValid = await _validationService.Validate(book);
+            //if (isValid) ....
+
+            try
+            {
+                var newBook = await _bookService.AddBookAsync(book);
+                if (newBook == null)
+                {
+                    return BadRequest();
+                }
+
+                return CreatedAtAction(nameof(GetBookAsync), new { id = newBook.Id }, newBook);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult CreateBooks(List<Book> books)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CreateBooksAsync(IEnumerable<Book> books)
         {
-            // validate books parameter
-
-            BookService.AddBooks(books);
-            return CreatedAtAction(nameof(GetAll), books);
+            // validate book parameter
+            //var isValid = await _validationService.Validate(books);
+            //if (isValid) ....
+            try
+            {
+                var newBooks = await _bookService.AddBooksAsync(books);
+                if (newBooks == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(newBooks);
+                //return CreatedAtAction(nameof(GetAllBooksAsync), books);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id, Book book)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateBookAsync(int id, Book book)
         {
-            if (id != book.Id)
+            try
             {
-                return BadRequest();
+                if (id != book.Id)
+                {
+                    return BadRequest("parameter 'id' does not match 'book.Id'");
+                }
+                var existingBook = await _bookService.GetBookAsync(id);
+                if (existingBook == null)
+                {
+                    return NotFound();
+                }
+                var isUpdated = await _bookService.UpdateBook(book);
+                return Ok(isUpdated);
             }
-            var existingBook = BookService.GetBook(id);
-            if (existingBook == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
+            }            
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RemoveBookAsync(int id)
+        {
+            try
+            {
+                var existingBook = await _bookService.GetBookAsync(id);
+                if (existingBook == null)
+                {
+                    return NotFound();
+                }
+                var isDeleted = await _bookService.DeleteBookAsync(id);
+                return Ok(isDeleted);
             }
-            BookService.UpdateBook(book);
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }                
         }
     }
 }

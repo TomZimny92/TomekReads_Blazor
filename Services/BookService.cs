@@ -1,20 +1,28 @@
-﻿using TomekReads.Models;
+﻿using Microsoft.Data.Sqlite;
+using TomekReads.Data;
+using TomekReads.Models;
 
 namespace TomekReads.Services
 {
-    public class BookService
+    public class BookService : IBookService
     {
-        public static List<Book> GetAll()
+        private readonly BookDbContext _context;
+
+        public BookService(BookDbContext context)
+        {
+            _context = context;
+        }
+
+        public async static Task<IEnumerable<Book>> GetAllAsync()
         {
             // open the database
             // query the database
             // format the results
             // return list of books
-            var newList = new List<Book>();
-            return newList;
+            return await _context.Books.ToList();
         }
 
-        public static Book? GetBook(int id)
+        public async static Task<Book?> GetBookAsync(int id)
         {
             // open the database
             // query the database using the id
@@ -25,9 +33,11 @@ namespace TomekReads.Services
             return newBook;
         }
 
-        public static void AddBook(Book book)
+        public async static Task<Book> AddBookAsync(Book book)
         {
-
+            await _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+            return book;
         }
 
         public static void AddBooks(IEnumerable<Book> books)
