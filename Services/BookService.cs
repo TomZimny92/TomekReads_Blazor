@@ -1,4 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 using TomekReads.Data;
 using TomekReads.Models;
 
@@ -6,48 +8,103 @@ namespace TomekReads.Services
 {
     public class BookService : IBookService
     {
-        private readonly BookDbContext _context;
+        private readonly BookDbContext _bookDbContext;
 
         public BookService(BookDbContext context)
         {
-            _context = context;
+            _bookDbContext = context;
         }
 
-        public async static Task<IEnumerable<Book>> GetAllAsync()
+        public async Task<IEnumerable<Book>?> GetAllAsync()
         {
-            // open the database
-            // query the database
-            // format the results
-            // return list of books
-            return await _context.Books.ToList();
+            try
+            {
+                return await _bookDbContext.Books.ToListAsync<Book>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
-        public async static Task<Book?> GetBookAsync(int id)
+        public async Task<Book?> GetBookAsync(int id)
         {
-            // open the database
-            // query the database using the id
-            // format the result
-            // if no result, throw exception?
-            // otherwise, return the result
-            var newBook = new Book{ Title="test"};
-            return newBook;
+            try {
+                var book = await _bookDbContext.Books.SingleOrDefaultAsync((b) => b.Id == id);
+                if (book == default)
+                {
+                    return null;
+                }
+                return book;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return null;
+            }
         }
 
-        public async static Task<Book> AddBookAsync(Book book)
+        public async Task<Book?> AddBookAsync(Book book)
         {
-            await _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-            return book;
+            try
+            {
+                await _bookDbContext.Books.AddAsync(book);
+                var newBook = await _bookDbContext.Books.FindAsync(book.Id);
+                if (newBook == null)
+                {
+                    return null;
+                }
+                await _bookDbContext.SaveChangesAsync();
+                return newBook;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message} \n {ex.StackTrace}");
+                return null;
+            }
         }
 
-        public static void AddBooks(IEnumerable<Book> books)
+        public async Task<IEnumerable<Book>> AddBooksAsync(IEnumerable<Book> books)
         {
+            var addedBooks = new List<Book>();
+            try
+            {
+                _bookDbContext.Books.AddRange(books);
 
+                foreach (var book in books)
+                {
+                    var newBook = await _bookDbContext.Books.FirstOrDefaultAsync((b) => b.Id == book.Id);
+                    if (newBook != null)
+                    {
+                        addedBooks.Add(newBook);
+                    }
+                }
+                return addedBooks;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message} \n {ex.StackTrace}");
+                
+                return addedBooks;
+
+            }
         }
 
-        public static void UpdateBook(Book book)
+        public async Task<bool> UpdateBookAsync(Book book)
         {
-            
+            // update the books
+            return true;
+        }
+
+        public async Task<bool> DeleteBookAsync(int id)
+        {
+            // delete the book
+        }
+
+        public async Task<bool> DeleteBooksAsync(IEnumerable<int> ids)
+        {
+            // delete the books
         }
     }
 }

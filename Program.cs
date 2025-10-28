@@ -15,6 +15,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<BookDbContext>(options => options.UseSqlite(connectionString));
 
+builder.Services.AddSqlite<BookDbContext>(connectionString);
+
 builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
