@@ -80,6 +80,7 @@ namespace TomekReads.Services
                         addedBooks.Add(newBook);
                     }
                 }
+                await _bookDbContext.SaveChangesAsync();
                 return addedBooks;
             }
             catch (Exception ex)
@@ -93,18 +94,65 @@ namespace TomekReads.Services
 
         public async Task<bool> UpdateBookAsync(Book book)
         {
-            // update the books
-            return true;
+            try
+            {
+                await _bookDbContext.Books
+                    .Where(b => b.Id == book.Id)
+                    .ExecuteUpdateAsync(b => b.SetProperty(bb => bb.Title, book.Title)
+                        .SetProperty(bb => bb.Review, book.Review)
+                        .SetProperty(bb => bb.Rating, book.Rating));
+
+                await _bookDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteBookAsync(int id)
         {
-            // delete the book
+            try
+            {
+                await _bookDbContext.Books
+                    .Where((b) => b.Id == id)
+                    .ExecuteDeleteAsync();
+
+                await _bookDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteBooksAsync(IEnumerable<int> ids)
         {
-            // delete the books
+            try
+            {
+                var booksToDelete = new List<Book>();
+                foreach (int id in ids)
+                {
+                    var book = await _bookDbContext.Books.FindAsync(id);
+                    if (book != null)
+                    {
+                        booksToDelete.Add(book);
+                    }
+                }
+                _bookDbContext.Books
+                    .RemoveRange(booksToDelete);
+                await _bookDbContext.SaveChangesAsync();
+                return true;
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
+                return false;
+            }
         }
     }
 }

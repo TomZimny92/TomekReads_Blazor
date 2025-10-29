@@ -1,4 +1,7 @@
 ﻿@page "/"
+@inject BookService BookService;
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using TomekReads.Models;
 @using TomekReads.Controllers;
 @using TomekReads.Services;
@@ -6,7 +9,7 @@
 <div>
     <button name="Add Book" onclick="OpenCreateEditor"/>
     <ul>
-        @foreach (var book in books)
+        @foreach (var book in Books)
         {
             <li>
                 <BookView Book="book" />
@@ -16,42 +19,39 @@
 </div>
 
 @code {
-    public void LoadBooks()
+    public class HomeModel : PageModel
     {
-        try
+
+        public List<Book> Books = new List<Book>();
+        private readonly IBookService _bookService;
+
+        public HomeModel(IBookService bs)
         {
-            var controller = new BookController();
-            var result = controller.GetAll().Value;
-            if (result != null)
+            _bookService = bs;
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            try
             {
-                books = result;
+                var result = await _bookService.GetAllAsync();
+                if (result != null)
+                {
+                    Books = result.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ex.Message: {ex.Message}");
             }
         }
-        catch
+
+        public void OpenCreateEditor()
         {
-
+            // open a modal to fill in new book info
+            // do one at a time for now
+            // add multiple books later
         }
     }
-
-    public void OpenCreateEditor()
-    {
-        // open a modal to fill in new book info
-        // do one at a time for now
-        // add multiple books later
-    }
-
-    private List<Book> books = [
-        new Book() {
-            Id = 0,
-            Title = "The Stranger",
-            Rating = 5,
-            Review = "Makes you wonder"
-    },
-        new Book() {
-            Id = 1,
-            Title = "Goosebumps",
-            Rating = 4,
-            Review = "Terrified me as a kid"
-        }
-    ];
+    
 }

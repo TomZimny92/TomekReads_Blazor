@@ -11,12 +11,10 @@ namespace TomekReads.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
-        private readonly BookDbContext _bookDbContext;
 
-        public BookController(IBookService bookService, BookDbContext bookDbContext)
+        public BookController(IBookService bookService)
         {
             _bookService = bookService;
-            _bookDbContext = bookDbContext;
         }
 
         [HttpGet]
