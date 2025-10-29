@@ -1,0 +1,21 @@
+﻿@using TomekReads.Models
+@inject TomekReads.Services.BookService BookService;
+@model IEnumerable<Book>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div>
+    <button name="Add Book" onclick="OpenCreateEditor" />
+    <ul>
+        @foreach (var book in Books)
+        {
+            <li>
+                <BookView Book="book" />
+            </li>
+        }
+    </ul>
+</div>
