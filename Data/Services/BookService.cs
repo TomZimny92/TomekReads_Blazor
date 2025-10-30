@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using TomekReads.Data;
-using TomekReads.Models;
+using TomekReads.Data.Models;
 
-namespace TomekReads.Services
+namespace TomekReads.Data.Services
 {
     public class BookService : IBookService
     {

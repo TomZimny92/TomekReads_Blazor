@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TomekReads.Models;
+using TomekReads.Data.Models;
 
 namespace TomekReads.Data
 {

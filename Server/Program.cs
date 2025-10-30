@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite;
-using Microsoft.EntityFrameworkCore.Design;
-using TomekReads.Components;
+using TomekReads.Client.Components;
 using TomekReads.Data;
-using TomekReads.Services;
+using TomekReads.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +29,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

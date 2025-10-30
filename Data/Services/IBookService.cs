@@ -1,5 +1,6 @@
-﻿using TomekReads.Models;
-namespace TomekReads.Services
+﻿using TomekReads.Data.Models;
+
+namespace TomekReads.Data.Services
 {
     public interface IBookService
     {

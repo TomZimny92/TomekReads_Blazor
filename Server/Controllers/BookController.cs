@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TomekReads.Services;
-using TomekReads.Models;
 using TomekReads.Data;
+using TomekReads.Data.Models;
+using TomekReads.Data.Services;
 
-namespace TomekReads.Controllers
+namespace TomekReads.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

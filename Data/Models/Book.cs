@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TomekReads.Models
+namespace TomekReads.Data.Models
 {
     public class Book
     {

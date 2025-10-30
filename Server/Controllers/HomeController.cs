@@ -2,7 +2,7 @@
 using TomekReads.Data;
 using TomekReads.Services;
 
-namespace TomekReads.Controllers
+namespace TomekReads.Server.Controllers
 {
     public class HomeController : Controller
     {
