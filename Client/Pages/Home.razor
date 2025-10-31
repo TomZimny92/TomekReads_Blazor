@@ -2,7 +2,9 @@
 @inject IBookService BookService;
 
 <div>Books!</div>
-<button name="Add Book" onclick="OpenCreateEditor" />
+<button class="action-button"
+        type="button"
+        onclick="OpenCreateEditor">Add Books</button>
 @if (Books == null)
 {
     <p><em>Fetching books...</em></p>
@@ -26,10 +28,16 @@ else
     </div>
 }
 
+@if (IsModalOpen) {
+    <AddBooks />
+}
+
 @code {
 
     private List<Book>? Books = new List<Book>();
     private readonly IBookService _bookService;
+    private AddBooks addBooks = default!;
+    private bool IsModalOpen = false;
 
     public Home(IBookService bookService)
     {
@@ -38,24 +46,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-            try
-            {
-                var result = await _bookService.GetAllAsync();
-                if (result != null)
-                {
-                    Books = result.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ex.Message: {ex.Message}");
-            }
-        }
-
-        public void OpenCreateEditor()
+        try
         {
-            // open a modal to fill in new book info
-            // do one at a time for now
-            // add multiple books later
+            var result = await _bookService.GetAllAsync();
+            if (result != null)
+            {
+                Books = result.ToList();
+            }
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"ex.Message: {ex.Message}");
+        }
+    }
+
+    public void OpenCreateEditor()
+    {
+        IsModalOpen = true;
+    }
 }

@@ -1,0 +1,30 @@
+﻿<h3>AddBooks</h3>
+
+<div>
+    <label title="Enter book title">
+        <input required @bind="Title" />
+    </label>
+    
+    <label title="Enter book rating">
+        <input type="number" @bind="Rating" />
+    </label>
+
+    <label title="Enter book review">
+        <input type="text" @bind="Review" />
+    </label>
+    
+    <button title="Submit" @onclick="AddBook" />
+</div>
+
+<button name="Add Another" />
+
+@code {
+    public required string Title { get; set; }
+    public int Rating { get; set; }
+    public string? Review { get; set; }
+
+    public async Task AddBook()
+    {
+
+    }
+}
