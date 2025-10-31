@@ -1,5 +1,35 @@
-﻿<h3>AddBooks</h3>
+﻿<div class="modal-backdrop show"></div>
 
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">AddBooks</h3>
+                <Button type="button" class="btn-close" @onclick="CloseCreateEditor" />
+            </div>
+            <div class="modal-body">
+                <label title="Enter book title">
+                    <input required @bind="Title" />
+                </label>
+
+                <label title="Enter book rating">
+                    <input type="number" @bind="Rating" />
+                </label>
+
+                <label title="Enter book review">
+                    <input type="text" @bind="Review" />
+                </label>
+
+                <button title="Submit" @onclick="AddBook" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseCreateEditor" />
+                <button type="button" class="btn btn-primary" @onclick="SaveNewBooks">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* 
 <div>
     <label title="Enter book title">
         <input required @bind="Title" />
@@ -14,7 +44,7 @@
     </label>
     
     <button title="Submit" @onclick="AddBook" />
-</div>
+</div> *@
 
 <button name="Add Another" />
 
@@ -27,4 +57,10 @@
     {
 
     }
+
+    [Parameter]
+    public EventCallback CloseCreateEditor { get; set; }
+
+    [Parameter]
+    public EventCallback SaveNewBooks { get; set; }
 }

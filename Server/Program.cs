@@ -17,6 +17,8 @@ builder.Services.AddSqlite<BookDbContext>(connectionString);
 
 builder.Services.AddScoped<IBookService, BookService>();
 
+builder.Services.AddBootstrapBlazor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

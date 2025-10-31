@@ -1,10 +1,11 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @inject IBookService BookService;
 
 <div>Books!</div>
-<button class="action-button"
-        type="button"
-        onclick="OpenCreateEditor">Add Books</button>
+<button class="btn btn-success mb-3" @onclick="OpenCreateEditor">
+    <span class="oi oi-plus" aria-hidden="true"></span> Add New Item
+</button>
 @if (Books == null)
 {
     <p><em>Fetching books...</em></p>
@@ -28,7 +29,8 @@ else
     </div>
 }
 
-@if (IsModalOpen) {
+@if (isModalOpen)
+{
     <AddBooks />
 }
 
@@ -37,7 +39,7 @@ else
     private List<Book>? Books = new List<Book>();
     private readonly IBookService _bookService;
     private AddBooks addBooks = default!;
-    private bool IsModalOpen = false;
+    private bool isModalOpen = false;
 
     public Home(IBookService bookService)
     {
@@ -56,12 +58,22 @@ else
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"ex.Message: {ex.Message}");
+            System.Console.WriteLine($"ex.Message: {ex.Message}");
         }
     }
 
-    public void OpenCreateEditor()
+    private void OpenCreateEditor()
     {
-        IsModalOpen = true;
+        isModalOpen = true;
+    }
+
+    private void CloseCreateEditor()
+    {
+        isModalOpen = false;
+    }
+
+    private void SaveNewBooks()
+    {
+        
     }
 }
