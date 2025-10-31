@@ -1,39 +1,43 @@
 ﻿@page "/"
-@inject BookService BookService;
-@using Microsoft.AspNetCore.Mvc.RazorPages
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
-@using TomekReads.Controllers;
-@using TomekReads.Data.Models
-@using TomekReads.Data.Services
-@using TomekReads.Models;
-@using TomekReads.Services;
+@inject IBookService BookService;
 
-<div>
-    <button name="Add Book" onclick="OpenCreateEditor"/>
-    <ul>
-        @foreach (var book in Books)
-        {
-            <li>
-                <BookView Book="book" />
-            </li>
-        }
-    </ul>
-</div>
+<div>Books!</div>
+<button name="Add Book" onclick="OpenCreateEditor" />
+@if (Books == null)
+{
+    <p><em>Fetching books...</em></p>
+}
+else if (!Books.Any())
+{
+    <p>No books recorded.</p>
+}
+else
+{
+    <div>
+
+        <ul>
+            @foreach (var book in Books)
+            {
+                <li>
+                    <BookView Book="book" />
+                </li>
+            }
+        </ul>
+    </div>
+}
 
 @code {
-    public class HomeModel : PageModel
+
+    private List<Book>? Books = new List<Book>();
+    private readonly IBookService _bookService;
+
+    public Home(IBookService bookService)
     {
+        _bookService = bookService;
+    }
 
-        public List<Book> Books = new List<Book>();
-        private readonly IBookService _bookService;
-
-        public HomeModel(IBookService bs)
-        {
-            _bookService = bs;
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
+    protected override async Task OnInitializedAsync()
+    {
             try
             {
                 var result = await _bookService.GetAllAsync();
@@ -54,6 +58,4 @@
             // do one at a time for now
             // add multiple books later
         }
-    }
-    
 }
