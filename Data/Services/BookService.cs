@@ -49,6 +49,9 @@ namespace TomekReads.Data.Services
         {
             try
             {
+                // need to determine a book id
+                // a dummy value is passed into "book"
+                // this value needs to be updated to a valid id
                 await _bookDbContext.Books.AddAsync(book);
                 var newBook = await _bookDbContext.Books.FindAsync(book.Id);
                 if (newBook == null)

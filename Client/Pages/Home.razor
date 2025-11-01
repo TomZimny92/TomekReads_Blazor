@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Threading.Tasks
 @rendermode InteractiveServer
 @inject IBookService BookService;
 
@@ -31,7 +32,7 @@ else
 
 @if (isModalOpen)
 {
-    <AddBooks />
+    <AddBooks CloseCreateEditor="CloseCreateEditor" SaveNewBooks="SaveNewBooks" />
 }
 
 @code {
@@ -72,8 +73,17 @@ else
         isModalOpen = false;
     }
 
-    private void SaveNewBooks()
+    private async Task SaveNewBooks(Book newBook)
     {
-        
+        try
+        {
+            var result = await _bookService.AddBookAsync(newBook);
+            isModalOpen = false;
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine($"ex.Message: {ex.Message}");
+        }
+
     }
 }

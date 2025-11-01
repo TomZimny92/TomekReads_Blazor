@@ -1,4 +1,6 @@
-﻿<div class="modal-backdrop show"></div>
+﻿@rendermode InteractiveServer
+
+<div class="modal-backdrop show"></div>
 
 <div class="modal fade show d-block" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -20,11 +22,10 @@
                     <input type="text" @bind="Review" />
                 </label>
 
-                <button title="Submit" @onclick="AddBook" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @onclick="CloseCreateEditor" />
-                <button type="button" class="btn btn-primary" @onclick="SaveNewBooks">Save</button>
+                <button type="button" class="btn btn-primary" @onclick="AddBook">Save</button>
             </div>
         </div>
     </div>
@@ -55,6 +56,14 @@
 
     public async Task AddBook()
     {
+        // put togehter a Book object using the inputs
+        var newBook = new Book
+            {
+                Id = 1,
+                Title = Title,
+                Rating = Rating,
+                Review = Review,
+            };
 
     }
 
