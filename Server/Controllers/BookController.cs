@@ -40,7 +40,7 @@ namespace TomekReads.Server.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Book>> GetBookAsync(int id)
+        public async Task<ActionResult<Book>> GetBookAsync(string id)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace TomekReads.Server.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateBookAsync(int id, Book book)
+        public async Task<IActionResult> UpdateBookAsync(string id, Book book)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace TomekReads.Server.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RemoveBookAsync(int id)
+        public async Task<IActionResult> RemoveBookAsync(string id)
         {
             try
             {
@@ -156,11 +156,11 @@ namespace TomekReads.Server.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RemoveBooksAsync(IEnumerable<int> ids)
+        public async Task<IActionResult> RemoveBooksAsync(IEnumerable<string> ids)
         {
             try
             {
-                var validIds = new List<int>();
+                var validIds = new List<string>();
                 foreach (var id in ids)
                 {
                     // get the books to see if they exist

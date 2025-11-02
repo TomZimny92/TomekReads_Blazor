@@ -28,7 +28,7 @@ namespace TomekReads.Data.Services
             }
         }
 
-        public async Task<Book?> GetBookAsync(int id)
+        public async Task<Book?> GetBookAsync(string id)
         {
             try {
                 var book = await _bookDbContext.Books.SingleOrDefaultAsync((b) => b.Id == id);
@@ -115,7 +115,7 @@ namespace TomekReads.Data.Services
             }
         }
 
-        public async Task<bool> DeleteBookAsync(int id)
+        public async Task<bool> DeleteBookAsync(string id)
         {
             try
             {
@@ -133,12 +133,12 @@ namespace TomekReads.Data.Services
             }
         }
 
-        public async Task<bool> DeleteBooksAsync(IEnumerable<int> ids)
+        public async Task<bool> DeleteBooksAsync(IEnumerable<string> ids)
         {
             try
             {
                 var booksToDelete = new List<Book>();
-                foreach (int id in ids)
+                foreach (string id in ids)
                 {
                     var book = await _bookDbContext.Books.FindAsync(id);
                     if (book != null)

@@ -10,8 +10,8 @@ using TomekReads.Data;
 namespace TomekReads.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20251025170209_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251102010054_UpdateItemPropertyType")]
+    partial class UpdateItemPropertyType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,10 +19,9 @@ namespace TomekReads.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
-            modelBuilder.Entity("TomekReads.Models.Book", b =>
+            modelBuilder.Entity("TomekReads.Data.Models.Book", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")

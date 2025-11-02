@@ -59,17 +59,20 @@
         // put togehter a Book object using the inputs
         var newBook = new Book
             {
-                Id = 1,
+                Id = Guid.CreateVersion7().ToString(),
                 Title = Title,
                 Rating = Rating,
                 Review = Review,
             };
-
+        if (SaveNewBooks.HasDelegate)
+        {
+            await SaveNewBooks.InvokeAsync(newBook);
+        }
     }
 
     [Parameter]
     public EventCallback CloseCreateEditor { get; set; }
 
     [Parameter]
-    public EventCallback SaveNewBooks { get; set; }
+    public EventCallback<Book> SaveNewBooks { get; set; }
 }
