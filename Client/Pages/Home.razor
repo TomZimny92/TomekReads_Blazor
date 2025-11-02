@@ -51,15 +51,20 @@ else
     {
         try
         {
-            var result = await _bookService.GetAllAsync();
-            if (result != null)
-            {
-                Books = result.ToList();
-            }
+            await LoadBooks();
         }
         catch (Exception ex)
         {
             System.Console.WriteLine($"ex.Message: {ex.Message}");
+        }
+    }
+
+    private async Task LoadBooks()
+    {
+        var result = await _bookService.GetAllAsync();
+        if (result != null)
+        {
+            Books = result.ToList();
         }
     }
 
@@ -79,11 +84,11 @@ else
         {
             var result = await _bookService.AddBookAsync(newBook);
             isModalOpen = false;
+            await LoadBooks();
         }
         catch (Exception ex)
         {
             System.Console.WriteLine($"ex.Message: {ex.Message}");
         }
-
     }
 }
