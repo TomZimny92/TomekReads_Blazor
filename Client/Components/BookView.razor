@@ -1,10 +1,13 @@
-﻿<div>
-    <h3>@Book?.Id</h3>
-    <h3>@Book?.Title</h3>
-    <h3>@Book?.Rating</h3>
-    <h3>@Book?.Review</h3>
-</div>
+﻿@using BootstrapBlazor.Components;
 
+<Card>
+</Card>
+
+<Card Style="width:18rem;">
+    <CardBody>
+        <CardTitle />
+    </CardBody>
+</Card>
 @code {
     [Parameter]
     public Book? Book { get; set; }
